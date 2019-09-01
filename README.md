@@ -1,6 +1,8 @@
-# LinkedIn Learning Video Downloader
+# LinkedIn Learning Video Downloader | [Teenenggr.com](https://teenenggr.com/)
 
 #### Based on [mclmza's linkedin-learning-downloader](https://github.com/mclmza/linkedin-learning-downloader) Edited by Jatin Patel
+
+
 
 Asynchronous scraping tool to fetch LinkedIn-learning's courses videos.
 
