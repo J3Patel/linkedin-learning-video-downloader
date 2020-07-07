@@ -4,11 +4,12 @@ import os
 USERNAME = 'temp@abc.com'
 PASSWORD = 'JatinPatel'
 COURSES = [
-
+    'ios-development-security',
+    'learning-autodesk-inventor'
 ]
 
 COLLECTIONS = [
-
+    '6686199457681301504'
 ]
 
 # EDIT IF YOU NEED TO
