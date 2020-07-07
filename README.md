@@ -23,13 +23,20 @@ Make sure your LinkedIn account is **NOT** protected with 2FA
 
 > pip install -r requirements.txt
 
-Edit config.py file (username, password and courses slugs)  
+Edit config.py file (username, password, collections and courses slugs)  
 
 ```Course's slug can be obtained using its url
 e.g:
 COURSE URL: https://www.linkedin.com/learning/learning-autodesk-inventor/creating-a-base-extrusion
 ->
 SLUG: learning-autodesk-inventor
+```
+
+```Collection's id can be obtained using its url
+e.g:
+COLLECTION URL: https://www.linkedin.com/learning/collections/6686199457681301504
+->
+ID: 6686199457681301504
 ```
 
 > python3 linkedin_learning.py
