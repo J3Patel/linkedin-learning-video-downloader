@@ -9,7 +9,7 @@ import logging
 from itertools import chain, filterfalse, starmap
 from collections import namedtuple
 from urllib.parse import urljoin
-from config import USERNAME, PASSWORD, COURSES, PROXY, BASE_DOWNLOAD_PATH
+from config import USERNAME, PASSWORD, COURSES, COLLECTIONS, PROXY, BASE_DOWNLOAD_PATH
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
 
@@ -100,6 +100,24 @@ async def login(username, password):
 
 async def fetch_courses():
     return await asyncio.gather(*map(fetch_course, COURSES))
+
+
+async def fetch_collections():
+    return await asyncio.gather(*map(fetch_collection, COLLECTIONS))
+
+
+async def fetch_collection(collection_id):
+    url = f"https://www.linkedin.com/learning-api/detailedLearningPlaylists" \
+                 f"/urn%3Ali%3AlearningCollection%3A{collection_id}"
+
+    async with aiohttp.ClientSession(headers=HEADERS, cookie_jar=COOKIE_JAR) as session:
+        resp = await session.get(url, proxy=PROXY, headers=HEADERS, ssl=False)
+        data = await resp.json()
+
+        for course in data['contents']:
+            courseName = course['com.linkedin.learning.api.ListedCourse']['slug']
+            logging.info(f'[*] Start  fetching course "{courseName}"')
+            await fetch_course(course['com.linkedin.learning.api.ListedCourse']['slug'])
 
 
 async def fetch_course(course_slug):
@@ -208,6 +226,9 @@ async def process():
         logging.info(PASSWORD)
         await login(USERNAME, PASSWORD)
         logging.info("[*] -------------Done-------------")
+
+        logging.info("[*] -------------Fetching Collection-------------")
+        await fetch_collections()
 
         logging.info("[*] -------------Fetching Course-------------")
         await fetch_courses()
