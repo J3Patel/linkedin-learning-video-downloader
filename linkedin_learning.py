@@ -112,6 +112,7 @@ async def fetch_collection(collection_id):
 
     async with aiohttp.ClientSession(headers=HEADERS, cookie_jar=COOKIE_JAR) as session:
         resp = await session.get(url, proxy=PROXY, headers=HEADERS, ssl=False)
+        
         data = await resp.json()
 
         for course in data['contents']:
@@ -227,8 +228,8 @@ async def process():
         await login(USERNAME, PASSWORD)
         logging.info("[*] -------------Done-------------")
 
-        logging.info("[*] -------------Fetching Collection-------------")
-        await fetch_collections()
+        # logging.info("[*] -------------Fetching Collection-------------")
+        # await fetch_collections()
 
         logging.info("[*] -------------Fetching Course-------------")
         await fetch_courses()
