@@ -112,7 +112,7 @@ async def fetch_collection(collection_id):
 
     async with aiohttp.ClientSession(headers=HEADERS, cookie_jar=COOKIE_JAR) as session:
         resp = await session.get(url, proxy=PROXY, headers=HEADERS, ssl=False)
-        
+
         data = await resp.json()
 
         for course in data['contents']:
@@ -178,14 +178,21 @@ async def fetch_video(course: Course, chapter: Chapter, video: Video):
             except aiohttp.client_exceptions.ClientResponseError:
                 pass
 
-        video_url = data['elements'][0]['selectedVideo']['url']['progressiveUrl']
-        subtitles = data['elements'][0]['selectedVideo']['transcript']['lines']
+        try:
+            subtitles = data['elements'][0]['selectedVideo']['transcript']
+            video_url = data['elements'][0]['selectedVideo']['url']['progressiveUrl']
+        except Exception:
+            subtitles = None
         duration_in_ms = int(data['elements'][0]['selectedVideo']['durationInSeconds']) * 1000
 
         if not video_exists:
+            logging.info(f"[~] Writing {video.filename}")
             await download_file(video_url, video_file_path)
 
-        await write_subtitles(subtitles, subtitle_file_path, duration_in_ms)
+        if subtitles is not None:
+            logging.info(f"[~] Writing {subtitles_filename}")
+            subtitle_lines = subtitles['lines']
+            await write_subtitles(subtitle_lines, subtitle_file_path, duration_in_ms)
 
     logging.info(f"[~] Done fetching course '{course.name}' Chapter no. {chapter.index} Video no. {video.index}")
 

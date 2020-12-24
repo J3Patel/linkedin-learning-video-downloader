@@ -9,7 +9,7 @@ COURSES = [
 ]
 
 COLLECTIONS = [
-    
+
 ]
 
 # EDIT IF YOU NEED TO
